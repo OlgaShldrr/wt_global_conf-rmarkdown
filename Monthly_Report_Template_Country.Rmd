@@ -1,5 +1,4 @@
 ---
-title: "Monthly Report template"
 output: pdf_document
 params:
   country: "Japan"
@@ -7,33 +6,20 @@ params:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-source("calculations.R")
+source("data_wrangling_for_country_param.R")
 ```
+# Monthly Report for `r params$country`
 
 ## Introduction
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.:
 
-```{r table, echo=FALSE}
+```{r table, echo=FALSE, warning=FALSE}
 
 MOCK_DATA %>% 
   select(Country = country, `Last Name` = last_name, `First Name` = first_name, `Purchases (EUR)` = purchases, `Number of discounts offered` = was_offered_discount, Gender= gender, Department = department) %>% 
   filter(Country == params$country) %>% 
-  gt::gt()
-
-MOCK_DATA_filtered_gender <- MOCK_DATA %>% 
-  select(Country = country, `Last Name` = last_name, `First Name` = first_name, `Purchases (EUR)`= purchases, `Number of discounts offered` = was_offered_discount, Gender= gender, Department = department) %>% 
-  filter(Country == params$country) %>% 
-  group_by(Gender) %>% 
-  summarise(`Total purchases (EUR)` = sum(`Purchases (EUR)`),
-            `Number of discounts offered` = sum(`Number of discounts offered`))
-
-MOCK_DATA_filtered_department <- MOCK_DATA%>% 
-  select(Country = country, `Last Name` = last_name, `First Name` = first_name, `Purchases (EUR)` = purchases, `Number of discounts offered` = was_offered_discount, Gender= gender, Department = department) %>% 
-  filter(Country == params$country) %>% 
-  group_by(Department) %>% 
-  summarise(`Total purchases (EUR)` = sum(`Purchases (EUR)`),
-            `Number of discounts offered` = sum(`Number of discounts offered`))
+  gt::gt() #makes tables pretty
 
 ```
 
@@ -41,8 +27,8 @@ MOCK_DATA_filtered_department <- MOCK_DATA%>%
 
 Ut enim ad minima veniam, quis nostrum exercitationem ullam:
 
-```{r plot, echo=FALSE}
-MOCK_DATA_filtered_gender %>% 
+```{r plot, echo=FALSE, warning=FALSE}
+MOCK_DATA_filtered_gender_country %>% 
   ggplot(aes(x=Gender, y=`Total purchases (EUR)`))+
   geom_bar(stat="identity", fill = "darkcyan")+
   theme_minimal()
@@ -54,8 +40,8 @@ At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praese
 
 Ut enim ad minima veniam, quis nostrum exercitationem ullam:
 
-```{r plot_credit_card, echo=FALSE}
-MOCK_DATA_filtered_department %>% 
+```{r plot_credit_card, echo=FALSE, warning=FALSE}
+MOCK_DATA_filtered_department_country %>% 
   ggplot(aes(x=Department, y=`Total purchases (EUR)`))+
   geom_bar(stat="identity", fill = "darkcyan")+
   theme_minimal()
